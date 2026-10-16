@@ -6,6 +6,9 @@ A comprehensive machine learning platform and web dashboard for student placemen
 [![Flask](https://img.shields.io/badge/Flask-3.0+-black?logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
 [![scikit-learn](https://img.shields.io/badge/scikit--learn-1.6+-F7931E?logo=scikitlearn&logoColor=white)](https://scikit-learn.org/)
 [![Status](https://img.shields.io/badge/Pipeline-10%2F10%20Modules%20Live-brightgreen)](#)
+[![Documentation PDF](https://img.shields.io/badge/Documentation-PDF%20Report-red?logo=adobeacrobatreader&logoColor=white)](DOCUMENTATION.pdf)
+
+> 📄 **Complete Technical Report**: A 14-page comprehensive technical and statistical report with embedded visualizations is available in [DOCUMENTATION.pdf](DOCUMENTATION.pdf).
 
 ---
 

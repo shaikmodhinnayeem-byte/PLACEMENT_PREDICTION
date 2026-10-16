@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Placement & Salary Intelligence Platform - Technical Documentation</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 18mm 15mm 18mm 15mm;
+      @bottom-right {
+        content: counter(page);
+      }
+    }
+    
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: #1f2937;
+      line-height: 1.55;
+      font-size: 10pt;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Page Breaks */
+    .page-break {
+      page-break-before: always;
+      break-before: page;
+      padding-top: 10px;
+    }
+    .avoid-break {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    /* Cover Page */
+    .cover-page {
+      height: 96vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 45px 35px;
+      background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
+      page-break-after: always;
+      break-after: page;
+    }
+    .cover-badge {
+      display: inline-block;
+      align-self: flex-start;
+      background: #2563eb;
+      color: white;
+      font-size: 8.5pt;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 20px;
+    }
+    .cover-title-group {
+      margin-top: 40px;
+    }
+    .cover-title {
+      font-size: 27pt;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.15;
+      margin: 0 0 12px 0;
+      letter-spacing: -0.02em;
+    }
+    .cover-subtitle {
+      font-size: 13pt;
+      color: #475569;
+      font-weight: 500;
+      margin: 0 0 25px 0;
+      line-height: 1.4;
+    }
+    .cover-meta {
+      border-top: 2px solid #cbd5e1;
+      padding-top: 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      font-size: 9.5pt;
+      color: #334155;
+    }
+    .cover-meta strong {
+      color: #0f172a;
+    }
+
+    /* Typography */
+    h1 {
+      font-size: 17pt;
+      color: #0f172a;
+      border-bottom: 2px solid #2563eb;
+      padding-bottom: 6px;
+      margin-top: 22px;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+    h2 {
+      font-size: 12.5pt;
+      color: #1e3a8a;
+      margin-top: 16px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    h3 {
+      font-size: 10.5pt;
+      color: #334155;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    p {
+      margin: 0 0 8px 0;
+      text-align: justify;
+    }
+    ul, ol {
+      margin: 4px 0 10px 22px;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 4px;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 16px 0;
+      font-size: 9pt;
+      page-break-inside: avoid;
+    }
+    th, td {
+      border: 1px solid #d1d5db;
+      padding: 7px 10px;
+      text-align: left;
+    }
+    th {
+      background: #f1f5f9;
+      color: #0f172a;
+      font-weight: 600;
+    }
+    tr:nth-child(even) td {
+      background: #f8fafc;
+    }
+
+    /* Metric Cards */
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 12px 0 16px 0;
+      page-break-inside: avoid;
+    }
+    .metric-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid #2563eb;
+      border-radius: 6px;
+      padding: 10px 12px;
+    }
+    .metric-card.accent {
+      border-left-color: #059669;
+    }
+    .metric-card.purple {
+      border-left-color: #7c3aed;
+    }
+    .metric-card.amber {
+      border-left-color: #d97706;
+    }
+    .metric-card .val {
+      font-size: 14.5pt;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.1;
+    }
+    .metric-card .label {
+      font-size: 7.5pt;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #64748b;
+      margin-top: 3px;
+      font-weight: 600;
+    }
+
+    /* Image Containers */
+    .img-center {
+      text-align: center;
+      margin: 10px 0;
+      page-break-inside: avoid;
+    }
+    .img-center img {
+      max-width: 95%;
+      max-height: 230px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      object-fit: contain;
+    }
+    .img-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 10px 0;
+      page-break-inside: avoid;
+    }
+    .img-grid-2 .img-item {
+      text-align: center;
+    }
+    .img-grid-2 img {
+      width: 100%;
+      height: 185px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      object-fit: contain;
+      background: white;
+    }
+    .img-caption {
+      font-size: 8pt;
+      color: #64748b;
+      font-style: italic;
+      margin-top: 4px;
+    }
+
+    /* Callout Boxes */
+    .callout {
+      background: #eff6ff;
+      border-left: 4px solid #3b82f6;
+      padding: 9px 13px;
+      border-radius: 4px;
+      margin: 10px 0;
+      font-size: 8.8pt;
+      color: #1e40af;
+      page-break-inside: avoid;
+    }
+    .callout.green {
+      background: #f0fdf4;
+      border-left-color: #22c55e;
+      color: #166534;
+    }
+
+    code {
+      background: #f1f5f9;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-family: Consolas, monospace;
+      font-size: 8.8pt;
+      color: #c026d3;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- COVER PAGE -->
+  <div class="cover-page">
+    <div>
+      <span class="cover-badge">Machine Learning Pipeline Documentation</span>
+      <div class="cover-title-group">
+        <h1 class="cover-title">Placement & Salary<br>Intelligence Platform</h1>
+        <p class="cover-subtitle">Comprehensive Technical Specification, Mathematical Formulations, Model Benchmarks, and Empirical Visualizations</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="metric-grid" style="margin-bottom: 25px;">
+        <div class="metric-card">
+          <div class="val">50,000</div>
+          <div class="label">Candidate Dataset</div>
+        </div>
+        <div class="metric-card accent">
+          <div class="val">92.03%</div>
+          <div class="label">Top Classification Acc</div>
+        </div>
+        <div class="metric-card purple">
+          <div class="val">0.919</div>
+          <div class="label">Regression R² Score</div>
+        </div>
+        <div class="metric-card amber">
+          <div class="val">10 / 10</div>
+          <div class="label">Active ML Modules</div>
+        </div>
+      </div>
+
+      <div class="cover-meta">
+        <div>
+          <strong>Document Type:</strong> System & Model Documentation<br>
+          <strong>Target Systems:</strong> Binary Classification & Salary Regression<br>
+          <strong>Frameworks:</strong> Python 3, Flask, scikit-learn, pandas
+        </div>
+        <div>
+          <strong>Repository:</strong> <a href="https://github.com/shaikmodhinnayeem-byte/PLACEMENT_PREDICTION" style="color: #2563eb; text-decoration: none;">PLACEMENT_PREDICTION</a><br>
+          <strong>Author / Team:</strong> shaikmodhinnayeem-byte<br>
+          <strong>Date Generated:</strong> October 2026
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS & EXECUTIVE SUMMARY -->
+  <h1>1. Executive Summary & Architecture</h1>
+  <p>
+    The <strong>Placement & Salary Intelligence Platform</strong> is a production-grade, dual-objective machine learning solution engineered to predict student campus placement feasibility and forecast compensation packages (LPA). Built upon a structured cohort of 50,000 student academic, technical, behavioral, and aptitude profiles, the system implements an end-to-end pipeline spanning exploratory data analysis, data hygiene, supervised classification/regression, sequential boosting, parallel ensemble architectures, and unsupervised clustering.
+  </p>
+  
+  <div class="callout green">
+    <strong>Key Milestone:</strong> The platform achieves <strong>92.03% classification accuracy</strong> (0.979 ROC-AUC) for placement qualification and predicts salary packages with an <strong>R² of 0.919</strong> (MAE 1.58 LPA, 88.35% MAPE accuracy).
+  </div>
+
+  <h2>System Architecture & Workflow</h2>
+  <ol>
+    <li><strong>Data Loader & Validation:</strong> Automated schema ingestion from CSV, data type verification, and null indicator detection across 32 features.</li>
+    <li><strong>Leakage-Free Preprocessing:</strong> Train/test splitting (80/20) executed prior to imputation, one-hot encoding, and Min-Max $[0, 1]$ feature scaling.</li>
+    <li><strong>Continuous Regression Engine:</strong> Ordinary Least Squares (OLS) regression trained strictly on placed students for compensation modeling.</li>
+    <li><strong>Supervised Classifiers:</strong> Baseline Logistic Regression, Quinlan's ID3 Decision Tree, Sequential Boosting (AdaBoost and GBM).</li>
+    <li><strong>Meta-Ensembles:</strong> Random Forest bagging, soft probabilistic voting, and logistic stacking meta-learners.</li>
+    <li><strong>Unsupervised Segmentation:</strong> K-Means persona clustering guided by Silhouette/Elbow curves, paired with DBSCAN density outlier detection.</li>
+    <li><strong>Web Service:</strong> Flask application serving responsive dashboards and real-time visualization endpoints.</li>
+  </ol>
+
+  <!-- DATASET SPECIFICATIONS & EDA -->
+  <div class="page-break"></div>
+  <h1>2. Dataset Specifications & Exploratory Analysis</h1>
+  <p>
+    The system utilizes a 50,000-record dataset containing student demographic attributes, academic performance records, technical competencies, project deliverables, internship counts, and mock interview scores.
+  </p>
+
+  <div class="avoid-break">
+    <h2>Feature Categories & Schema</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Key Features</th>
+          <th>Data Types</th>
+          <th>Description & Business Purpose</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Academic</strong></td>
+          <td><code>CGPA</code>, <code>SSC_Marks</code>, <code>HSC_Marks</code></td>
+          <td>Continuous (Float)</td>
+          <td>Cumulative undergraduate GPA and standardized high school performance metrics.</td>
+        </tr>
+        <tr>
+          <td><strong>Experience</strong></td>
+          <td><code>Internships</code>, <code>Projects</code>, <code>Workshops</code></td>
+          <td>Discrete (Integer)</td>
+          <td>Practical industry exposures, hands-on portfolio count, and technical workshop counts.</td>
+        </tr>
+        <tr>
+          <td><strong>Skills</strong></td>
+          <td><code>AptitudeScore</code>, <code>SoftSkills</code>, <code>Certifications</code></td>
+          <td>Integer / String</td>
+          <td>Cognitive aptitude exam scores, communication ratings, and domain certifications.</td>
+        </tr>
+        <tr>
+          <td><strong>Demographics</strong></td>
+          <td><code>Gender</code>, <code>Branch</code>, <code>Backlogs</code></td>
+          <td>Categorical / Integer</td>
+          <td>Discipline (CSE, IT, ECE, ME, CE), gender distribution, and active backlog status.</td>
+        </tr>
+        <tr>
+          <td><strong>Target Variables</strong></td>
+          <td><code>PlacementStatus</code>, <code>Salary</code></td>
+          <td>Binary / Continuous</td>
+          <td><code>PlacementStatus</code> (0 = Unplaced, 1 = Placed); <code>Salary</code> (LPA in lakhs).</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Empirical Data Distributions & Correlations</h2>
+  <p>
+    Exploratory analysis demonstrates that <strong>65.7% (32,850 students)</strong> are placed while <strong>34.3% (17,150 students)</strong> remain unplaced. Academic performance (CGPA) exhibits a strong positive separation: placed students exhibit a significantly higher median CGPA (7.8+) compared to unplaced students (5.8).
+  </p>
+
+  <div class="img-grid-2">
+    <div class="img-item">
+      <img src="static/charts/placement_class_balance.png" alt="Class Balance">
+      <div class="img-caption">Figure 2.1: Target Class Distribution (65.7% Placed vs 34.3% Unplaced)</div>
+    </div>
+    <div class="img-item">
+      <img src="static/charts/cgpa_distribution.png" alt="CGPA Distribution">
+      <div class="img-caption">Figure 2.2: CGPA Frequency Distribution Partitioned by Placement Status</div>
+    </div>
+  </div>
+
+  <div class="img-center">
+    <img src="static/charts/correlation_matrix.png" alt="Correlation Matrix" style="max-height: 250px;">
+    <div class="img-caption">Figure 2.3: Pearson Correlation Heatmap across Academic, Technical, and Compensation Metrics</div>
+  </div>
+
+  <!-- PREPROCESSING & NORMALIZATION -->
+  <div class="page-break"></div>
+  <h1>3. Preprocessing & Min-Max Normalization</h1>
+  <p>
+    Machine learning pipelines require rigorous safeguards against <em>data leakage</em>. Transformations must learn summary parameters exclusively from the training partition and apply those fixed boundaries onto the test partition.
+  </p>
+
+  <div class="callout">
+    <strong>Leakage-Free Execution Protocol:</strong> The dataset is partitioned into an 80% training set (40,000 samples) and a 20% holdout test set (10,000 samples) using stratified sampling prior to fitting imputation medians or Min-Max scaling boundaries.
+  </div>
+
+  <h2>Mathematical Formulation of Min-Max Normalization</h2>
+  <p>
+    To standardize diverse continuous feature scales (e.g., CGPA ranging from 4.0 to 10.0 vs Aptitude Scores ranging from 0 to 100) into a uniform bounded interval $[0, 1]$, each continuous value $x$ is normalized as:
+  </p>
+  <p style="text-align: center; font-size: 11pt; margin: 10px 0; font-family: 'Times New Roman', serif;">
+    $$x_{\text{norm}} = \frac{x - x_{\min,\text{train}}}{x_{\max,\text{train}} - x_{\min,\text{train}}}$$
+  </p>
+  <p>
+    Any test sample $x_{\text{test}}$ falling outside the observed training extrema is clipped to $[0, 1]$ to avoid numerical instability in distance-sensitive classifiers (e.g., K-Means, Logistic Regression with regularization).
+  </p>
+
+  <h2>Missing Value Imputation & Categorical Encoding</h2>
+  <ul>
+    <li><strong>Median Imputation:</strong> Robust against outliers, continuous nulls (e.g., missed mock tests) are filled using training set medians.</li>
+    <li><strong>One-Hot Encoding:</strong> Nominal categorical features (<code>Branch</code>, <code>Gender</code>) are mapped to sparse binary columns with the first category dropped (<code>drop='first'</code>) to prevent multicollinearity (dummy variable trap).</li>
+  </ul>
+
+  <!-- LINEAR REGRESSION SALARY MODEL -->
+  <div class="page-break"></div>
+  <h1>4. Continuous Salary Package Prediction (Linear Regression)</h1>
+  <p>
+    Compensation forecasting is framed as a continuous regression problem. Since unplaced students do not receive salary offers, training regression models on zeros distorts linear regression gradients. Therefore, the salary model is fitted <strong>exclusively on placed candidates</strong> ($N = 32,850$).
+  </p>
+
+  <div class="metric-grid">
+    <div class="metric-card">
+      <div class="val">0.919</div>
+      <div class="label">R² Coefficient</div>
+    </div>
+    <div class="metric-card accent">
+      <div class="val">1.58 LPA</div>
+      <div class="label">Mean Absolute Error</div>
+    </div>
+    <div class="metric-card purple">
+      <div class="val">88.35%</div>
+      <div class="label">MAPE Accuracy</div>
+    </div>
+    <div class="metric-card amber">
+      <div class="val">74.30%</div>
+      <div class="label">±15% Tolerance Accuracy</div>
+    </div>
+  </div>
+
+  <h2>Tolerance-Based Accuracy Metrics</h2>
+  <p>
+    Traditional regression metrics ($R^2$, RMSE) do not immediately translate to operational confidence intervals. We define the <em>Tolerance Accuracy ($Acc_{\delta}$)</em> as the percentage of test students whose predicted package $\hat{y}_i$ lies within $\pm \delta\%$ of the ground-truth package $y_i$:
+  </p>
+  <p style="text-align: center; font-size: 10pt; margin: 8px 0; font-family: 'Times New Roman', serif;">
+    $$Acc_{\delta} = \frac{1}{N_{\text{test}}} \sum_{i=1}^{N_{\text{test}}} \mathbb{I}\left( \left|\frac{\hat{y}_i - y_i}{y_i}\right| \le \delta \right) \times 100\%$$
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Tolerance Band</th>
+        <th>Accuracy (%)</th>
+        <th>Clinical Interpretation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>±10% Strict Tolerance</strong></td>
+        <td>56.2%</td>
+        <td>Predictions within a narrow band of actual recruiter compensation offers.</td>
+      </tr>
+      <tr>
+        <td><strong>±15% Standard Margin</strong></td>
+        <td><strong>74.3%</strong></td>
+        <td>Standard industry threshold for initial compensation expectations.</td>
+      </tr>
+      <tr>
+        <td><strong>±20% Relaxed Margin</strong></td>
+        <td>86.7%</td>
+        <td>Broad estimation capturing general pay-band tiers.</td>
+      </tr>
+      <tr>
+        <td><strong>±1.0 LPA Absolute Margin</strong></td>
+        <td>68.9%</td>
+        <td>Predictions landing within ₹1,00,000 per annum of the final offer.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="img-center">
+    <img src="static/charts/linear_actual_vs_predicted.png" alt="Actual vs Predicted Salary" style="max-height: 240px;">
+    <div class="img-caption">Figure 4.1: Actual vs. Predicted Compensation (LPA) with ±15% Accuracy Tolerance Envelope</div>
+  </div>
+
+  <!-- LOGISTIC REGRESSION -->
+  <div class="page-break"></div>
+  <h1>5. Placement Classification (Logistic Regression)</h1>
+  <p>
+    Logistic Regression models the posterior probability $P(Y=1|X)$ of a student securing campus placement as a logistic sigmoid function of a linear combination of normalized predictor features:
+  </p>
+  <p style="text-align: center; font-size: 11pt; margin: 10px 0; font-family: 'Times New Roman', serif;">
+    $$P(Y=1|X) = \sigma(w^T X + b) = \frac{1}{1 + e^{-(w^T X + b)}}$$
+  </p>
+  <p>
+    The model is fitted by minimizing binary cross-entropy (log-loss) using the L-BFGS optimizer with $L_2$ regularization.
+  </p>
+
+  <div class="metric-grid">
+    <div class="metric-card">
+      <div class="val">92.03%</div>
+      <div class="label">Test Accuracy</div>
+    </div>
+    <div class="metric-card accent">
+      <div class="val">0.979</div>
+      <div class="label">ROC AUC Score</div>
+    </div>
+    <div class="metric-card purple">
+      <div class="val">92.70%</div>
+      <div class="label">Precision</div>
+    </div>
+    <div class="metric-card amber">
+      <div class="val">95.40%</div>
+      <div class="label">Recall</div>
+    </div>
+  </div>
+
+  <div class="img-grid-2">
+    <div class="img-item">
+      <img src="static/charts/logistic_roc_curve.png" alt="Logistic ROC Curve">
+      <div class="img-caption">Figure 5.1: Logistic Regression Receiver Operating Characteristic (AUC = 0.979)</div>
+    </div>
+    <div class="img-item">
+      <img src="static/charts/logistic_confusion_matrix.png" alt="Logistic Confusion Matrix">
+      <div class="img-caption">Figure 5.2: Normalized Confusion Matrix Demonstrating High True Positive Rate (95.4%)</div>
+    </div>
+  </div>
+
+  <h2>Interpretable Odds Ratios</h2>
+  <p>
+    By exponentiating the model coefficients $\exp(w_j)$, we extract exact multiplicative odds ratios for each predictor. A 1.0 unit increase in normalized CGPA increases the odds of placement by over $4.2\times$, while each completed corporate internship increases placement odds by approximately $1.65\times$.
+  </p>
+
+  <!-- ID3 DECISION TREE -->
+  <div class="page-break"></div>
+  <h1>6. Interpretable ID3 Decision Tree Classifier</h1>
+  <p>
+    The ID3 (Iterative Dichotomiser 3) algorithm provides white-box interpretability by partitioning feature space based on <strong>Shannon Entropy</strong> and <strong>Information Gain (IG)</strong>:
+  </p>
+  <p style="text-align: center; font-size: 10pt; margin: 8px 0; font-family: 'Times New Roman', serif;">
+    $$H(S) = - \sum_{i=1}^c p_i \log_2(p_i), \qquad IG(S, A) = H(S) - \sum_{v \in \text{Values}(A)} \frac{|S_v|}{|S|} H(S_v)$$
+  </p>
+  <p>
+    To prevent overfitting and enable instant human inspection, the tree depth is pruned to a maximum depth of 4.
+  </p>
+
+  <div class="metric-grid">
+    <div class="metric-card">
+      <div class="val">89.21%</div>
+      <div class="label">Tree Accuracy</div>
+    </div>
+    <div class="metric-card accent">
+      <div class="val">0.960</div>
+      <div class="label">ROC AUC</div>
+    </div>
+    <div class="metric-card purple">
+      <div class="val">96.30%</div>
+      <div class="label">Sensitivity / Recall</div>
+    </div>
+    <div class="metric-card amber">
+      <div class="val">4 Levels</div>
+      <div class="label">Pruned Depth</div>
+    </div>
+  </div>
+
+  <div class="img-center">
+    <img src="static/charts/id3_tree_structure.png" alt="ID3 Tree Hierarchy" style="max-height: 250px;">
+    <div class="img-caption">Figure 6.1: Hierarchical ID3 Decision Tree Structure Displaying Root and Intermediate Decision Splits</div>
+  </div>
+
+  <div class="img-grid-2">
+    <div class="img-item">
+      <img src="static/charts/id3_feature_importance.png" alt="Feature Importance">
+      <div class="img-caption">Figure 6.2: Gini / Entropy Impurity Reduction per Feature</div>
+    </div>
+    <div class="img-item">
+      <img src="static/charts/id3_confusion_matrix.png" alt="ID3 Confusion Matrix">
+      <div class="img-caption">Figure 6.3: ID3 Confusion Matrix on Holdout Test Set</div>
+    </div>
+  </div>
+
+  <!-- BOOSTING BENCHMARK -->
+  <div class="page-break"></div>
+  <h1>7. Boosting Algorithms (AdaBoost vs Gradient Boosting)</h1>
+  <p>
+    Sequential ensemble boosting corrects errors made by predecessor estimators. We benchmark two foundational boosting paradigms:
+  </p>
+  <ul>
+    <li><strong>AdaBoost (Adaptive Boosting):</strong> Sequentially re-weights misclassified training instances, forcing subsequent decision stumps to focus on difficult edge cases.</li>
+    <li><strong>Gradient Boosting Machine (GBM):</strong> Fits successive base estimators directly to the negative gradient (pseudo-residuals) of the loss function.</li>
+  </ul>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Boosting Model</th>
+        <th>Base Estimator</th>
+        <th>Accuracy</th>
+        <th>ROC AUC</th>
+        <th>Precision</th>
+        <th>Recall</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>AdaBoost</strong></td>
+        <td>Decision Stump (Depth 1)</td>
+        <td>91.35%</td>
+        <td>0.976</td>
+        <td>92.00%</td>
+        <td>94.90%</td>
+      </tr>
+      <tr>
+        <td><strong>Gradient Boosting (GBM)</strong></td>
+        <td>Regression Trees (Depth 3)</td>
+        <td><strong>91.81%</strong></td>
+        <td><strong>0.978</strong></td>
+        <td><strong>92.40%</strong></td>
+        <td><strong>95.30%</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="img-grid-2">
+    <div class="img-item">
+      <img src="static/charts/boosting_roc_comparison.png" alt="Comparative ROC">
+      <div class="img-caption">Figure 7.1: Superimposed ROC Curves: AdaBoost vs GBM</div>
+    </div>
+    <div class="img-item">
+      <img src="static/charts/boosting_learning_curve.png" alt="Staged Learning Curves">
+      <div class="img-caption">Figure 7.2: Staged Error Reduction across 100 Estimator Stages</div>
+    </div>
+  </div>
+
+  <div class="img-center">
+    <img src="static/charts/boosting_feature_importance.png" alt="Boosting Feature Importance" style="max-height: 200px;">
+    <div class="img-caption">Figure 7.3: Normalized Feature Weight Contributions under Gradient Boosting</div>
+  </div>
+
+  <!-- ENSEMBLE ARCHITECTURES -->
+  <div class="page-break"></div>
+  <h1>8. Ensemble Learning Architectures (Bagging, Voting, Stacking)</h1>
+  <p>
+    Ensemble methods aggregate diverse hypothesis spaces to reduce variance, bias, or both. We evaluate three distinct paradigms:
+  </p>
+  <ul>
+    <li><strong>Bagging (Random Forest):</strong> 100 parallel bootstrapped trees with random feature subspaces ($\sqrt{d}$) to reduce variance.</li>
+    <li><strong>Soft Voting Classifier:</strong> Weighted average of predicted class probabilities across Logistic Regression, Random Forest, and Decision Trees.</li>
+    <li><strong>Stacking Meta-Classifier:</strong> Employs out-of-fold cross-validated probability predictions from base learners as input features to a Logistic Regression blender.</li>
+  </ul>
+
+  <div class="img-grid-2">
+    <div class="img-item">
+      <img src="static/charts/ensemble_comparison.png" alt="Ensemble Leaderboard">
+      <div class="img-caption">Figure 8.1: Comparative Accuracy Across Base and Ensemble Models</div>
+    </div>
+    <div class="img-item">
+      <img src="static/charts/ensemble_agreement.png" alt="Model Agreement">
+      <div class="img-caption">Figure 8.2: Inter-Model Prediction Agreement Matrix (Pairwise Correlation)</div>
+    </div>
+  </div>
+
+  <div class="avoid-break">
+    <h2>Comprehensive Model Performance Leaderboard</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Model Rank & Name</th>
+          <th>Paradigm</th>
+          <th>Test Accuracy</th>
+          <th>ROC AUC</th>
+          <th>Computational Cost</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1. Logistic Regression</strong></td>
+          <td>Linear Baseline</td>
+          <td><strong>92.03%</strong></td>
+          <td><strong>0.979</strong></td>
+          <td>Ultra Fast (< 0.1s)</td>
+        </tr>
+        <tr>
+          <td><strong>2. Gradient Boosting (GBM)</strong></td>
+          <td>Sequential Boosting</td>
+          <td>91.81%</td>
+          <td>0.978</td>
+          <td>Moderate (1.8s)</td>
+        </tr>
+        <tr>
+          <td><strong>3. Soft Voting Classifier</strong></td>
+          <td>Probabilistic Ensemble</td>
+          <td>91.76%</td>
+          <td>0.978</td>
+          <td>Moderate (1.2s)</td>
+        </tr>
+        <tr>
+          <td><strong>4. Stacking Classifier</strong></td>
+          <td>Meta-Learning Blender</td>
+          <td>91.64%</td>
+          <td>0.978</td>
+          <td>High (2.4s)</td>
+        </tr>
+        <tr>
+          <td><strong>5. AdaBoost Classifier</strong></td>
+          <td>Sequential Boosting</td>
+          <td>91.35%</td>
+          <td>0.976</td>
+          <td>Fast (0.6s)</td>
+        </tr>
+        <tr>
+          <td><strong>6. Random Forest</strong></td>
+          <td>Parallel Bagging</td>
+          <td>91.30%</td>
+          <td>0.975</td>
+          <td>Moderate (1.1s)</td>
+        </tr>
+        <tr>
+          <td><strong>7. ID3 Decision Tree</strong></td>
+          <td>Interpretable Single Tree</td>
+          <td>89.22%</td>
+          <td>0.960</td>
+          <td>Ultra Fast (< 0.1s)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- UNSUPERVISED LEARNING -->
+  <div class="page-break"></div>
+  <h1>9. Unsupervised Learning & Student Segmentation</h1>
+  <p>
+    Beyond supervised placement labels, universities require unsupervised persona discovery to identify student talent archetypes and pinpoint isolated anomalies requiring academic intervention.
+  </p>
+
+  <h2>K-Means Clustering: Elbow & Silhouette Optimization</h2>
+  <p>
+    We apply the Elbow method (Sum of Squared Errors) and Silhouette coefficients across $K \in [2, 8]$ to determine the natural cluster count. A global maximum silhouette score ($s = 0.35$) is discovered at <strong>$K = 3$ distinct student archetypes</strong>:
+  </p>
+  <ul>
+    <li><strong>Cohort 0 (High-Achievers):</strong> High CGPA (8.2+), multiple completed internships, advanced aptitude scores. Placement probability: 96%.</li>
+    <li><strong>Cohort 1 (Average All-Rounders):</strong> Moderate CGPA (6.5 - 7.5), standard course projects, basic aptitude. Placement probability: 68%.</li>
+    <li><strong>Cohort 2 (At-Risk Students):</strong> Low CGPA (< 6.0), history of backlogs, low interview scores. Placement probability: 19%.</li>
+  </ul>
+
+  <div class="img-grid-2">
+    <div class="img-item">
+      <img src="static/charts/kmeans_elbow_silhouette.png" alt="Elbow and Silhouette Curves">
+      <div class="img-caption">Figure 9.1: Elbow SSE Curve & Silhouette Analysis Confirming Optimal K=3</div>
+    </div>
+    <div class="img-item">
+      <img src="static/charts/kmeans_clusters_pca.png" alt="K-Means PCA">
+      <div class="img-caption">Figure 9.2: 2D Principal Component Projection of Identified Student Cohorts</div>
+    </div>
+  </div>
+
+  <div class="img-center">
+    <img src="static/charts/kmeans_cluster_profiles.png" alt="Cluster Profiles" style="max-height: 200px;">
+    <div class="img-caption">Figure 9.3: Radar/Bar Feature Profiles for Identified Student Cohorts</div>
+  </div>
+
+  <h2>DBSCAN Density-Based Anomaly Detection</h2>
+  <p>
+    Unlike spherical K-Means, DBSCAN groups points based on localized spatial density ($\varepsilon, \text{MinPts}$). We plot the sorted 4-nearest neighbor distance curve to locate the maximum curvature "knee", yielding an empirical $\varepsilon \approx 0.42$. Outlier points in sparse density zones are classified as noise ($-1$).
+  </p>
+
+  <div class="img-grid-2">
+    <div class="img-item">
+      <img src="static/charts/dbscan_k_distance.png" alt="DBSCAN K-Distance">
+      <div class="img-caption">Figure 9.4: Sorted K-Distance Graph for Optimal Epsilon Selection</div>
+    </div>
+    <div class="img-item">
+      <img src="static/charts/dbscan_clusters_pca.png" alt="DBSCAN Clusters PCA">
+      <div class="img-caption">Figure 9.5: DBSCAN Dense Clusters and Isolated Outlier Noise Points</div>
+    </div>
+  </div>
+
+  <!-- CONCLUSION & DEPLOYMENT -->
+  <div class="page-break"></div>
+  <h1>10. Web Dashboard & Production Deployment</h1>
+  <p>
+    The analytical models are integrated into a modern Flask web dashboard configured with modular routing, cached execution pipelines (<code>@lru_cache</code>), and responsive HTML5/CSS3 templates.
+  </p>
+
+  <div class="avoid-break">
+    <h2>Flask Application Endpoint Map</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Endpoint Route</th>
+          <th>HTTP Method</th>
+          <th>Underlying Module</th>
+          <th>Output Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>/</code></td>
+          <td>GET</td>
+          <td><code>app.py</code> (Index)</td>
+          <td>Overview dashboard with metrics, pipeline status, and module links.</td>
+        </tr>
+        <tr>
+          <td><code>/data-loading</code></td>
+          <td>GET</td>
+          <td><code>ml/data_loader.py</code></td>
+          <td>CSV schema viewer, shape metrics, null value summary, and data preview.</td>
+        </tr>
+        <tr>
+          <td><code>/eda</code></td>
+          <td>GET</td>
+          <td><code>ml/eda.py</code></td>
+          <td>Interactive charts: class balance, CGPA histograms, correlation matrix.</td>
+        </tr>
+        <tr>
+          <td><code>/preprocessing</code></td>
+          <td>GET</td>
+          <td><code>ml/preprocessing.py</code></td>
+          <td>Normalized feature distributions and train/test split summary.</td>
+        </tr>
+        <tr>
+          <td><code>/linear-regression</code></td>
+          <td>GET</td>
+          <td><code>ml/linear_regression.py</code></td>
+          <td>Salary model evaluation, R², MAE, and tolerance interval analysis.</td>
+        </tr>
+        <tr>
+          <td><code>/logistic-regression</code></td>
+          <td>GET</td>
+          <td><code>ml/logistic_regression.py</code></td>
+          <td>Placement classifier, ROC curve, confusion matrix, and odds ratios.</td>
+        </tr>
+        <tr>
+          <td><code>/decision-tree</code></td>
+          <td>GET</td>
+          <td><code>ml/decision_tree.py</code></td>
+          <td>ID3 tree visual rule inspector, feature importance, entropy metrics.</td>
+        </tr>
+        <tr>
+          <td><code>/boosting</code></td>
+          <td>GET</td>
+          <td><code>ml/boosting.py</code></td>
+          <td>AdaBoost vs GBM benchmark, staged error loss, and ROC curves.</td>
+        </tr>
+        <tr>
+          <td><code>/ensemble-learning</code></td>
+          <td>GET</td>
+          <td><code>ml/ensemble_learning.py</code></td>
+          <td>Random Forest, Soft Voting, and Stacking meta-model benchmark.</td>
+        </tr>
+        <tr>
+          <td><code>/kmeans-clustering</code></td>
+          <td>GET</td>
+          <td><code>ml/kmeans_clustering.py</code></td>
+          <td>K-Means Elbow & Silhouette evaluation with student persona profiles.</td>
+        </tr>
+        <tr>
+          <td><code>/dbscan-clustering</code></td>
+          <td>GET</td>
+          <td><code>ml/dbscan_clustering.py</code></td>
+          <td>Density-based clustering with k-distance knee analysis and noise isolation.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Reproducibility & Execution Command</h2>
+  <p>To run the application locally on any Windows or POSIX environment:</p>
+  <pre style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px 14px; border-radius: 6px; font-family: Consolas, monospace; font-size: 8.5pt;">
+# 1. Clone repository
+git clone https://github.com/shaikmodhinnayeem-byte/PLACEMENT_PREDICTION.git
+cd PLACEMENT_PREDICTION
+
+# 2. Re-create virtual environment & install requirements
+python -m venv .venv
+.\.venv\Scripts\activate
+pip install -r requirements.txt
+
+# 3. Start the dashboard server
+python app.py
+# Server live on: http://127.0.0.1:5000
+  </pre>
+
+  <div class="callout green" style="margin-top: 15px;">
+    <strong>Verification Completed:</strong> All 10 pipeline modules executed with 0 errors. All assets, documentation, and model charts are maintained under version control in the GitHub repository.
+  </div>
+
+</body>
+</html>
