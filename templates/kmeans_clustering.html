@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}K-Means Clustering | Placement Prediction Dashboard{% endblock %}
+{% block content %}
+  <section class="page-heading">
+    <p class="eyebrow">Unsupervised Learning</p>
+    <h1>K-Means Clustering & Student Personas</h1>
+    <p>Segmenting student skill profiles into distinct clusters using Min-Max Normalized features and Euclidean distance.</p>
+  </section>
+  {% if error %}
+    <section class="notice error"><h2>Dataset unavailable</h2><p>{{ error }}</p></section>
+  {% else %}
+    <section class="metrics four">
+      <article style="border-top:4px solid var(--blue);">
+        <strong>K = {{ result.optimal_k }}</strong>
+        <span>Optimal Clusters</span>
+      </article>
+      <article style="border-top:4px solid var(--green);">
+        <strong>{{ result.silhouette_score }}</strong>
+        <span>Silhouette Coefficient</span>
+      </article>
+      <article>
+        <strong>{{ result.sample_size | int }}</strong>
+        <span>Clustered Students</span>
+      </article>
+      <article>
+        <strong>Min-Max [0, 1]</strong>
+        <span>Feature Normalization</span>
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2>Discovered Student Cluster Personas</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Cluster ID</th>
+              <th>Persona Name</th>
+              <th>Size (% Share)</th>
+              <th>Placement Rate</th>
+              <th>Avg Salary (LPA)</th>
+              <th>Avg CGPA</th>
+              <th>Avg Coding Score</th>
+              <th>Avg Aptitude</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for prof in result.profiles %}
+            <tr>
+              <td><span class="badge badge-purple">Cluster {{ prof.id }}</span></td>
+              <td><strong>{{ prof.name }}</strong></td>
+              <td>{{ prof.size }} ({{ prof.percentage }}%)</td>
+              <td>
+                <span class="badge {{ 'badge-green' if prof.placement_rate > 70 else ('badge-blue' if prof.placement_rate > 50 else 'badge-amber') }}">
+                  {{ prof.placement_rate }}%
+                </span>
+              </td>
+              <td>{{ prof.avg_salary }} LPA</td>
+              <td>{{ prof.means.CGPA }}</td>
+              <td>{{ prof.means.CodingTestScore }}</td>
+              <td>{{ prof.means.AptitudeTestScore }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chart-grid">
+      <article class="panel">
+        <h2>Optimal K: Elbow Curve & Silhouette Score</h2>
+        <p class="subtle">Evaluating inertia drop-off and cluster separation across K = 2 to 6.</p>
+        <img src="{{ url_for('static', filename=result.elbow_chart) }}" alt="Elbow and Silhouette Score Charts">
+      </article>
+      <article class="panel">
+        <h2>2D PCA Cluster Map with Centroids</h2>
+        <p class="subtle">Projection onto 2 principal components with cluster centroids (marked X).</p>
+        <img src="{{ url_for('static', filename=result.pca_chart) }}" alt="K-Means PCA Clusters">
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2>Cluster Skill & Academic Profile Comparison</h2>
+      <p class="subtle">Mean attribute metrics illustrating relative strengths across clusters.</p>
+      <img class="model-chart" src="{{ url_for('static', filename=result.profile_chart) }}" alt="Cluster Skill Comparison Bar Chart">
+    </section>
+  {% endif %}
+{% endblock %}

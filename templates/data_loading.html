@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Data Loading | Placement Prediction Dashboard{% endblock %}
+{% block content %}
+  <section class="page-heading"><p class="eyebrow">Live module</p><h1>Data Loading</h1><p>Dataset dimensions, schema, missing values, and the first ten records.</p></section>
+  {% if error %}
+    <section class="notice error"><h2>Dataset unavailable</h2><p>{{ error }}</p></section>
+  {% else %}
+    <section class="metrics"><article><strong>{{ summary.row_count }}</strong><span>Rows</span></article><article><strong>{{ summary.column_count }}</strong><span>Columns</span></article></section>
+    <section class="panel"><h2>Column summary</h2><div class="table-wrap"><table><thead><tr><th>Column</th><th>Data type</th><th>Missing values</th></tr></thead><tbody>{% for column in summary.columns %}<tr><td>{{ column.name }}</td><td><code>{{ column.dtype }}</code></td><td class="{{ 'has-missing' if column.missing else '' }}">{{ column.missing }}</td></tr>{% endfor %}</tbody></table></div></section>
+    <section class="panel"><h2>Preview: first 10 rows</h2><div class="table-wrap"><table><thead><tr>{% for column in summary.preview_columns %}<th>{{ column }}</th>{% endfor %}</tr></thead><tbody>{% for row in summary.preview_rows %}<tr>{% for column in summary.preview_columns %}<td>{{ row[column] }}</td>{% endfor %}</tr>{% endfor %}</tbody></table></div></section>
+  {% endif %}
+{% endblock %}

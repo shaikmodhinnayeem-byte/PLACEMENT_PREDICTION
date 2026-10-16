@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Placement & Salary Intelligence Platform{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-container">
+      <div class="brand-group">
+        <a class="brand" href="{{ url_for('index') }}">
+          <div class="brand-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            </svg>
+          </div>
+          <span class="brand-name">Placement<span>Predict</span></span>
+        </a>
+        <span class="brand-tag">ML Intelligence Lab</span>
+      </div>
+      <div class="header-meta">
+        <div class="meta-pill">
+          <span class="pulse-dot"></span>
+          <span>10 / 10 Models Active</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="navigation-bar" aria-label="Main navigation">
+    <div class="nav-container">
+      <div class="nav-scroller">
+        <a href="{{ url_for('index') }}" class="nav-pill {{ 'active' if request.path == url_for('index') else '' }}">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          </svg>
+          <span>Overview</span>
+        </a>
+        {% for module in module_status.values() %}
+          <a href="{{ url_for(module.endpoint) }}" class="nav-pill {{ 'active' if request.path == url_for(module.endpoint) else '' }}">
+            <span class="nav-dot {{ 'live' if module.implemented else 'pending' }}"></span>
+            <span>{{ module.short_name or module.name }}</span>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </nav>
+
+  <main class="page-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-container">
+      <p>Placement & Salary Intelligence Platform &bull; End-to-End Machine Learning Suite</p>
+    </div>
+  </footer>
+</body>
+</html>

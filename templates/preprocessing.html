@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Preprocessing & Normalization | Placement Prediction Dashboard{% endblock %}
+{% block content %}
+  <section class="page-heading">
+    <p class="eyebrow">Live module</p>
+    <h1>Preprocessing & Min-Max Normalization</h1>
+    <p>A reproducible, leakage-safe pipeline supporting both Standard Scaling and Min-Max Normalization.</p>
+  </section>
+  {% if error %}
+    <section class="notice error"><h2>Dataset unavailable</h2><p>{{ error }}</p></section>
+  {% else %}
+    <section class="metrics four">
+      <article><strong>{{ result.feature_count }}</strong><span>Input features</span></article>
+      <article><strong>{{ result.numerical_count }}</strong><span>Numerical features</span></article>
+      <article><strong>{{ result.categorical_count }}</strong><span>Categorical features</span></article>
+      <article><strong>{{ result.transformed_feature_count }}</strong><span>Encoded features</span></article>
+    </section>
+
+    <section class="panel">
+      <h2>Min-Max Normalization (Feature Scaling to [0, 1])</h2>
+      <p class="subtle">Min-Max Normalization rescales numeric attributes into a fixed bound between 0 and 1 using the formula below. This is especially vital for distance-based algorithms like <strong>K-Means Clustering</strong> and <strong>DBSCAN</strong> where scale disparities can distort Euclidean distance.</p>
+      <div class="formula-box" style="background:#f7f9fd; padding:16px 20px; border-radius:10px; border-left:4px solid var(--blue); margin-bottom:20px;">
+        <strong style="color:var(--ink); font-size:1.05rem;">Mathematical Formula:</strong>
+        <p style="margin:6px 0 0; font-family:monospace; font-size:1.02rem; color:#2764d7;">X_norm = (X - X_min) / (X_max - X_min)</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Feature Name</th>
+              <th>Original Min</th>
+              <th>Original Max</th>
+              <th>Original Mean</th>
+              <th>Normalized Min</th>
+              <th>Normalized Max</th>
+              <th>Normalized Mean</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in result.minmax_comparisons %}
+            <tr>
+              <td><strong>{{ item.feature }}</strong></td>
+              <td>{{ item.orig_min }}</td>
+              <td>{{ item.orig_max }}</td>
+              <td>{{ item.orig_mean }}</td>
+              <td><span class="badge badge-green">{{ item.norm_min }}</span></td>
+              <td><span class="badge badge-blue">{{ item.norm_max }}</span></td>
+              <td>{{ item.norm_mean }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="two-column">
+      <article class="panel">
+        <h2>Leakage-safe split</h2>
+        <dl class="definition-list">
+          <dt>Split</dt><dd>80% training / 20% testing, stratified by PlacementStatus</dd>
+          <dt>Training rows</dt><dd>{{ result.train_rows | int }} ({{ result.placed_train | int }} placed)</dd>
+          <dt>Testing rows</dt><dd>{{ result.test_rows | int }} ({{ result.placed_test | int }} placed)</dd>
+          <dt>Transformed shapes</dt><dd>Train {{ result.train_shape }}; test {{ result.test_shape }}</dd>
+        </dl>
+      </article>
+      <article class="panel">
+        <h2>Pipeline rules & Scalers</h2>
+        <dl class="definition-list">
+          <dt>Min-Max Scaling</dt><dd>Used for K-Means, DBSCAN, and bounded range modeling</dd>
+          <dt>Standard Scaling</dt><dd>Used for Linear and Logistic Regression (Z-score normalization)</dd>
+          <dt>Numeric Imputation</dt><dd>Median imputation on training split</dd>
+          <dt>Categorical</dt><dd>Most-frequent imputation followed by one-hot encoding</dd>
+          <dt>Excluded</dt><dd>{{ result.excluded_columns | join(', ') }}</dd>
+        </dl>
+      </article>
+    </section>
+
+    <section class="two-column">
+      <article class="panel">
+        <h2>Columns with missing values</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Column</th><th>Missing values</th></tr>
+            </thead>
+            <tbody>
+              {% for column in result.missing_columns %}
+              <tr><td>{{ column.name }}</td><td class="has-missing">{{ column.missing | int }}</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </article>
+      <article class="panel">
+        <h2>Feature groups</h2>
+        <p class="small-label">Numerical ({{ result.numerical_count }})</p>
+        <p class="feature-list">{{ result.numerical_columns | join(', ') }}</p>
+        <p class="small-label">Categorical ({{ result.categorical_count }})</p>
+        <p class="feature-list">{{ result.categorical_columns | join(', ') }}</p>
+      </article>
+    </section>
+  {% endif %}
+{% endblock %}

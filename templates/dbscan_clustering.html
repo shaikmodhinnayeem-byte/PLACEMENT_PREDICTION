@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}DBSCAN Clustering | Placement Prediction Dashboard{% endblock %}
+{% block content %}
+  <section class="page-heading">
+    <p class="eyebrow">Density Clustering</p>
+    <h1>DBSCAN Clustering & Outlier Detection</h1>
+    <p>Density-Based Spatial Clustering of Applications with Noise: isolating dense student cohorts and detecting anomalous outliers.</p>
+  </section>
+  {% if error %}
+    <section class="notice error"><h2>Dataset unavailable</h2><p>{{ error }}</p></section>
+  {% else %}
+    <section class="metrics four">
+      <article style="border-top:4px solid var(--blue);">
+        <strong>{{ result.n_clusters }}</strong>
+        <span>Dense Core Clusters</span>
+      </article>
+      <article style="border-top:4px solid var(--red);">
+        <strong>{{ result.n_noise }}</strong>
+        <span>Noise / Outliers ({{ result.noise_ratio }}%)</span>
+      </article>
+      <article>
+        <strong>ε = {{ result.eps }}</strong>
+        <span>Neighborhood Radius (Eps)</span>
+      </article>
+      <article>
+        <strong>{{ result.min_samples }}</strong>
+        <span>Min Core Samples</span>
+      </article>
+    </section>
+
+    <section class="two-column">
+      <article class="panel">
+        <h2>DBSCAN Working Mechanics</h2>
+        <dl class="definition-list">
+          <dt>Core Points</dt><dd>Samples with at least {{ result.min_samples }} neighbors within distance ε ({{ result.eps }}).</dd>
+          <dt>Border Points</dt><dd>Within ε of a core point but lacking sufficient neighbors of their own.</dd>
+          <dt>Noise Points (-1)</dt><dd>Outliers that belong to no cluster (shown as red markers).</dd>
+          <dt>Arbitrary Shapes</dt><dd>Unlike K-Means, DBSCAN can find non-spherical clusters of arbitrary geometry.</dd>
+        </dl>
+      </article>
+      <article class="panel">
+        <h2>Anomaly / Outlier Analysis</h2>
+        <dl class="definition-list">
+          <dt>Detected Outliers</dt><dd>{{ result.n_noise }} student profiles</dd>
+          <dt>Noise Percentage</dt><dd>{{ result.noise_ratio }}% of sampled cohort</dd>
+          {% if result.anomaly_match_rate is not none %}
+          <dt>Planted Anomaly Recall</dt><dd><span class="badge badge-green">{{ result.anomaly_match_rate }}%</span> captured as noise</dd>
+          {% endif %}
+          <dt>Profile Implication</dt><dd>Outliers feature irregular cross-skill ratios (e.g. top coding with low CGPA or vice versa).</dd>
+        </dl>
+      </article>
+    </section>
+
+    <section class="chart-grid">
+      <article class="panel">
+        <h2>DBSCAN Clusters & Outliers (PCA 2D)</h2>
+        <p class="subtle">Clusters in colors, noise points marked as distinct red markers.</p>
+        <img src="{{ url_for('static', filename=result.pca_chart) }}" alt="DBSCAN Clusters Map">
+      </article>
+      <article class="panel">
+        <h2>K-Distance Graph for Epsilon (ε) Choice</h2>
+        <p class="subtle">Optimal ε sits around the elbow threshold where nearest neighbor distances sharply rise.</p>
+        <img src="{{ url_for('static', filename=result.k_distance_chart) }}" alt="K-Distance Graph">
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2>Cluster & Noise Segment Breakdown</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Cluster Label</th>
+              <th>Classification</th>
+              <th>Student Count</th>
+              <th>Share (%)</th>
+              <th>Placement Rate</th>
+              <th>Avg CGPA</th>
+              <th>Avg Coding Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in result.cluster_details %}
+            <tr {% if c.is_noise %}style="background:#fff8f9;"{% endif %}>
+              <td>
+                {% if c.is_noise %}
+                  <span class="badge badge-red">Noise (-1)</span>
+                {% else %}
+                  <span class="badge badge-blue">Cluster {{ c.id }}</span>
+                {% endif %}
+              </td>
+              <td><strong>{{ c.name }}</strong></td>
+              <td>{{ c.count }}</td>
+              <td>{{ c.percentage }}%</td>
+              <td>
+                <span class="badge {{ 'badge-green' if c.placement_rate > 65 else 'badge-amber' }}">
+                  {{ c.placement_rate }}%
+                </span>
+              </td>
+              <td>{{ c.avg_cgpa }}</td>
+              <td>{{ c.avg_coding }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  {% endif %}
+{% endblock %}

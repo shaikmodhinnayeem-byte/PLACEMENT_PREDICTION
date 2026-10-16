@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}Boosting Algorithms | Placement Prediction Dashboard{% endblock %}
+{% block content %}
+  <section class="page-heading">
+    <p class="eyebrow">Ensemble Module</p>
+    <h1>Boosting Algorithms</h1>
+    <p>Sequential ensemble learning comparing <strong>AdaBoost</strong> (Adaptive Boosting) and <strong>Gradient Boosting</strong> (GBM).</p>
+  </section>
+  {% if error %}
+    <section class="notice error"><h2>Dataset unavailable</h2><p>{{ error }}</p></section>
+  {% else %}
+    <section class="metrics four">
+      <article style="border-top:4px solid var(--green);">
+        <strong>{{ result.gradient_boosting.accuracy }}%</strong>
+        <span>Gradient Boosting Accuracy</span>
+      </article>
+      <article style="border-top:4px solid var(--blue);">
+        <strong>{{ result.adaboost.accuracy }}%</strong>
+        <span>AdaBoost Accuracy</span>
+      </article>
+      <article>
+        <strong>{{ result.gradient_boosting.auc }}</strong>
+        <span>Gradient Boosting AUC</span>
+      </article>
+      <article>
+        <strong>{{ result.adaboost.auc }}</strong>
+        <span>AdaBoost AUC</span>
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2>Algorithm Comparison: AdaBoost vs Gradient Boosting</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Metric / Aspect</th>
+              <th>AdaBoost (Adaptive Boosting)</th>
+              <th>Gradient Boosting (GBM)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Test Accuracy</strong></td>
+              <td><span class="badge badge-blue">{{ result.adaboost.accuracy }}%</span></td>
+              <td><span class="badge badge-green">{{ result.gradient_boosting.accuracy }}%</span></td>
+            </tr>
+            <tr>
+              <td><strong>ROC-AUC</strong></td>
+              <td>{{ result.adaboost.auc }}</td>
+              <td><strong>{{ result.gradient_boosting.auc }}</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Precision / Recall</strong></td>
+              <td>{{ result.adaboost.precision }}% / {{ result.adaboost.recall }}%</td>
+              <td>{{ result.gradient_boosting.precision }}% / {{ result.gradient_boosting.recall }}%</td>
+            </tr>
+            <tr>
+              <td><strong>F1-Score</strong></td>
+              <td>{{ result.adaboost.f1 }}%</td>
+              <td>{{ result.gradient_boosting.f1 }}%</td>
+            </tr>
+            <tr>
+              <td><strong>Core Principle</strong></td>
+              <td>Increases weights of misclassified instances each round.</td>
+              <td>Fits successive trees to the gradient of the loss function (pseudo-residuals).</td>
+            </tr>
+            <tr>
+              <td><strong>Weak Learners</strong></td>
+              <td>Decision stumps (depth 1 trees by default).</td>
+              <td>Shallow regression trees (depth 3, shrinkage rate 0.1).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chart-grid">
+      <article class="panel">
+        <h2>Comparative ROC Curves</h2>
+        <p class="subtle">Sensitivity vs specificity trade-off across varying decision thresholds.</p>
+        <img src="{{ url_for('static', filename=result.roc_chart) }}" alt="Comparative ROC Curves">
+      </article>
+      <article class="panel">
+        <h2>Staged Estimator Accuracy Progression</h2>
+        <p class="subtle">Evaluating test accuracy as consecutive boosting trees are added.</p>
+        <img src="{{ url_for('static', filename=result.staged_chart) }}" alt="Boosting Learning Progression">
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2>Feature Importance: AdaBoost vs Gradient Boosting</h2>
+      <p class="subtle">Comparison of top attributes driving predictions in both boosting algorithms.</p>
+      <img class="model-chart" src="{{ url_for('static', filename=result.imp_chart) }}" alt="Feature Importance Comparison">
+    </section>
+  {% endif %}
+{% endblock %}

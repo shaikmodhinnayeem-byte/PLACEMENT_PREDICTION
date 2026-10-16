@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block title %}Linear Regression & Accuracy | Placement Prediction Dashboard{% endblock %}
+{% block content %}
+  <section class="page-heading">
+    <p class="eyebrow">Live module</p>
+    <h1>Linear Regression & Accuracy Metrics</h1>
+    <p>Salary Package prediction trained on placed students with comprehensive regression accuracy evaluation.</p>
+  </section>
+  {% if error %}
+    <section class="notice error"><h2>Dataset unavailable</h2><p>{{ error }}</p></section>
+  {% else %}
+    <!-- Accuracy Highlights Banner -->
+    <section class="metrics four">
+      <article style="border-top:4px solid var(--blue);">
+        <strong>{{ result.tol_15_acc }}%</strong>
+        <span>Accuracy (±15% Tolerance)</span>
+      </article>
+      <article style="border-top:4px solid var(--green);">
+        <strong>{{ result.mape_accuracy }}%</strong>
+        <span>MAPE Accuracy (100 - MAPE)</span>
+      </article>
+      <article>
+        <strong>{{ result.r2_percent }}%</strong>
+        <span>R² Variance Explained</span>
+      </article>
+      <article>
+        <strong>{{ result.mae }} LPA</strong>
+        <span>Mean Absolute Error (MAE)</span>
+      </article>
+    </section>
+
+    <section class="two-column">
+      <article class="panel">
+        <h2>Regression Accuracy Breakdown</h2>
+        <p class="subtle">Unlike classification, regression predictions are continuous. Accuracy is measured using precision tolerance intervals and percentage error thresholds:</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Accuracy Measure</th><th>Threshold Criterion</th><th>Result</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Strict Accuracy (±10%)</strong></td>
+                <td>Within ±10% of true salary</td>
+                <td><span class="badge badge-blue">{{ result.tol_10_acc }}%</span></td>
+              </tr>
+              <tr>
+                <td><strong>Standard Accuracy (±15%)</strong></td>
+                <td>Within ±15% of true salary</td>
+                <td><span class="badge badge-green">{{ result.tol_15_acc }}%</span></td>
+              </tr>
+              <tr>
+                <td><strong>Relaxed Accuracy (±20%)</strong></td>
+                <td>Within ±20% of true salary</td>
+                <td><span class="badge badge-green">{{ result.tol_20_acc }}%</span></td>
+              </tr>
+              <tr>
+                <td><strong>Absolute LPA Margin (±1.0 LPA)</strong></td>
+                <td>Prediction within 1 Lakh/annum</td>
+                <td><span class="badge badge-purple">{{ result.tol_1lpa_acc }}%</span></td>
+              </tr>
+              <tr>
+                <td><strong>Mean Percentage Error (MAPE)</strong></td>
+                <td>Average relative error</td>
+                <td>{{ result.mape }}% (Acc: {{ result.mape_accuracy }}%)</td>
+              </tr>
+              <tr>
+                <td><strong>R² Goodness-of-Fit</strong></td>
+                <td>Proportion of variance captured</td>
+                <td>{{ result.r2 }} ({{ result.r2_percent }}%)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+      
+      <article class="panel">
+        <h2>Evaluation Setup & Means</h2>
+        <dl class="definition-list">
+          <dt>Target</dt><dd>Salary Package (LPA)</dd>
+          <dt>Dataset Filter</dt><dd>PlacementStatus = 1 (Placed students only)</dd>
+          <dt>Training Set</dt><dd>{{ result.train_rows | int }} students</dd>
+          <dt>Test Set</dt><dd>{{ result.test_rows | int }} students</dd>
+          <dt>Actual Mean</dt><dd>{{ result.actual_mean }} LPA</dd>
+          <dt>Predicted Mean</dt><dd>{{ result.predicted_mean }} LPA</dd>
+          <dt>RMSE Error</dt><dd>{{ result.rmse }} LPA</dd>
+          <dt>Interpretation</dt><dd>The model closely matches the test set mean salary with low variance.</dd>
+        </dl>
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2>Actual vs Predicted Salary with Tolerance Band</h2>
+      <p class="subtle">Points enclosed within the shaded zone fall within the acceptable ±15% prediction accuracy tolerance.</p>
+      <img class="model-chart" src="{{ url_for('static', filename=result.chart) }}" alt="Scatter plot comparing actual and predicted salary packages with tolerance bands">
+    </section>
+
+    <section class="panel">
+      <h2>Top Linear Regression Feature Coefficients</h2>
+      <p class="subtle">Coefficients quantify how strongly each student attribute impacts the offered salary package.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Feature Name</th><th>Impact (Coefficient)</th><th>Direction</th></tr>
+          </thead>
+          <tbody>
+            {% for item in result.coefficients %}
+            <tr>
+              <td><strong>{{ item.feature }}</strong></td>
+              <td>{{ '%.3f' | format(item.coefficient) }}</td>
+              <td>
+                {% if item.coefficient > 0 %}
+                  <span class="badge badge-green">Positive (+Salary)</span>
+                {% else %}
+                  <span class="badge badge-amber">Negative (-Salary)</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  {% endif %}
+{% endblock %}

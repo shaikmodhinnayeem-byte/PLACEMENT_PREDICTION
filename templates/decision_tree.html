@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}ID3 Decision Tree | Placement Prediction Dashboard{% endblock %}
+{% block content %}
+  <section class="page-heading">
+    <p class="eyebrow">Classification Module</p>
+    <h1>ID3 Decision Tree</h1>
+    <p>Placement status classification using Quinlan's ID3 algorithm based on Shannon Entropy and Information Gain.</p>
+  </section>
+  {% if error %}
+    <section class="notice error"><h2>Dataset unavailable</h2><p>{{ error }}</p></section>
+  {% else %}
+    <section class="metrics four">
+      <article style="border-top:4px solid var(--blue);">
+        <strong>{{ result.accuracy }}%</strong>
+        <span>Test Accuracy</span>
+      </article>
+      <article style="border-top:4px solid var(--green);">
+        <strong>{{ result.f1 }}%</strong>
+        <span>F1-Score</span>
+      </article>
+      <article>
+        <strong>{{ result.root_entropy }}</strong>
+        <span>Root Entropy H(S)</span>
+      </article>
+      <article>
+        <strong>{{ result.auc }}</strong>
+        <span>ROC-AUC Score</span>
+      </article>
+    </section>
+
+    <section class="two-column">
+      <article class="panel">
+        <h2>ID3 Mathematical Principles</h2>
+        <div class="formula-box" style="background:#f7f9fd; padding:14px; border-radius:8px; border-left:4px solid #5d4fa8; margin-bottom:14px;">
+          <p style="margin:0 0 6px; font-weight:700; color:var(--ink);">1. Shannon Entropy:</p>
+          <code style="display:block; font-size:.95rem;">H(S) = - ∑ p_i * log2(p_i)</code>
+          <p style="margin:10px 0 6px; font-weight:700; color:var(--ink);">2. Information Gain:</p>
+          <code style="display:block; font-size:.95rem;">IG(S, A) = H(S) - ∑ (|S_v| / |S|) * H(S_v)</code>
+        </div>
+        <p class="subtle">At each node, ID3 computes Information Gain for every feature and selects the attribute that maximizes entropy reduction.</p>
+      </article>
+
+      <article class="panel">
+        <h2>Model Topology & Performance</h2>
+        <dl class="definition-list">
+          <dt>Criterion</dt><dd>Entropy (Information Gain)</dd>
+          <dt>Tree Depth</dt><dd>{{ result.tree_depth }} levels</dd>
+          <dt>Terminal Leaves</dt><dd>{{ result.leaf_count }} leaf nodes</dd>
+          <dt>Precision</dt><dd>{{ result.precision }}%</dd>
+          <dt>Recall</dt><dd>{{ result.recall }}%</dd>
+          <dt>Training Data</dt><dd>{{ result.train_rows | int }} students</dd>
+          <dt>Testing Data</dt><dd>{{ result.test_rows | int }} students</dd>
+        </dl>
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2>ID3 Decision Tree Structure Diagram</h2>
+      <p class="subtle">Graphical representation of the trained decision tree showing feature thresholds, entropy levels, sample proportions, and class outcomes.</p>
+      <img class="wide-chart" src="{{ url_for('static', filename=result.tree_chart) }}" alt="ID3 Decision Tree Structure Diagram">
+    </section>
+
+    <section class="chart-grid">
+      <article class="panel">
+        <h2>Confusion Matrix</h2>
+        <img src="{{ url_for('static', filename=result.conf_chart) }}" alt="Confusion Matrix">
+      </article>
+      <article class="panel">
+        <h2>Information Gain by Feature</h2>
+        <img src="{{ url_for('static', filename=result.imp_chart) }}" alt="Feature Importance Chart">
+      </article>
+    </section>
+
+    <section class="two-column">
+      <article class="panel">
+        <h2>Top Information Gain Attributes</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Attribute</th><th>Information Gain / Importance</th></tr>
+            </thead>
+            <tbody>
+              {% for item in result.top_features %}
+              <tr>
+                <td><strong>{{ item.feature }}</strong></td>
+                <td><span class="badge badge-purple">{{ item.gain }}</span></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </article>
+      <article class="panel">
+        <h2>Sample Decision Rules (Text Tree)</h2>
+        <pre style="background:#172033; color:#bdc8dc; padding:16px; border-radius:8px; font-size:.85rem; overflow-x:auto; margin:0;">{% for rule in result.sample_rules %}{{ rule }}
+{% endfor %}</pre>
+      </article>
+    </section>
+  {% endif %}
+{% endblock %}

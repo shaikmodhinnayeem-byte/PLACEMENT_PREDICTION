@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Ensemble Learning | Placement Prediction Dashboard{% endblock %}
+{% block content %}
+  <section class="page-heading">
+    <p class="eyebrow">Advanced Modeling</p>
+    <h1>Ensemble Learning</h1>
+    <p>Combining multiple base models via <strong>Bagging (Random Forest)</strong>, <strong>Soft Voting</strong>, and <strong>Stacking</strong>.</p>
+  </section>
+  {% if error %}
+    <section class="notice error"><h2>Dataset unavailable</h2><p>{{ error }}</p></section>
+  {% else %}
+    <section class="metrics four">
+      <article style="border-top:4px solid var(--green);">
+        <strong>{{ result.best_ensemble.name }}</strong>
+        <span>Top Ensemble Paradigm</span>
+      </article>
+      <article style="border-top:4px solid var(--blue);">
+        <strong>{{ result.best_ensemble.accuracy }}%</strong>
+        <span>Ensemble Accuracy</span>
+      </article>
+      <article>
+        <strong>{{ result.best_ensemble.auc }}</strong>
+        <span>Ensemble ROC-AUC</span>
+      </article>
+      <article>
+        <strong>{{ result.best_ensemble.f1 }}%</strong>
+        <span>Ensemble F1-Score</span>
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2>Ensemble vs Individual Model Benchmark</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Architecture</th>
+              <th>Category</th>
+              <th>Accuracy</th>
+              <th>Precision</th>
+              <th>Recall</th>
+              <th>F1-Score</th>
+              <th>ROC-AUC</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for model in result.models %}
+            <tr {% if model.name == result.best_model.name %}style="background:#f7f9fd; font-weight:bold;"{% endif %}>
+              <td>
+                <strong>{{ model.name }}</strong>
+                {% if model.name == result.best_model.name %}<span class="badge badge-green" style="margin-left:8px;">Best</span>{% endif %}
+              </td>
+              <td><span class="badge {{ 'badge-blue' if model.category == 'Ensemble' else 'badge-amber' }}">{{ model.category }}</span></td>
+              <td><strong>{{ model.accuracy }}%</strong></td>
+              <td>{{ model.precision }}%</td>
+              <td>{{ model.recall }}%</td>
+              <td>{{ model.f1 }}%</td>
+              <td>{{ model.auc }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chart-grid">
+      <article class="panel">
+        <h2>Accuracy & AUC Comparison</h2>
+        <p class="subtle">Evaluating performance enhancements delivered by ensemble combinations.</p>
+        <img src="{{ url_for('static', filename=result.comp_chart) }}" alt="Ensemble Benchmark Bar Chart">
+      </article>
+      <article class="panel">
+        <h2>Model Prediction Agreement Matrix</h2>
+        <p class="subtle">Percentage of identical student placement predictions across model pairs.</p>
+        <img src="{{ url_for('static', filename=result.agree_chart) }}" alt="Prediction Agreement Matrix">
+      </article>
+    </section>
+
+    <section class="two-column">
+      <article class="panel">
+        <h2>Ensemble Mechanics</h2>
+        <dl class="definition-list">
+          <dt>Bagging (RF)</dt><dd>Reduces variance by aggregating de-correlated bootstrap trees in parallel.</dd>
+          <dt>Voting</dt><dd>Combines predicted class probabilities across diverse algorithm families.</dd>
+          <dt>Stacking</dt><dd>Trains a meta-learner (Logistic Regression) on predictions of heterogeneous base models.</dd>
+        </dl>
+      </article>
+      <article class="panel">
+        <h2>Key Takeaways</h2>
+        <p class="subtle">Ensemble architectures significantly lower generalisation error, dampen individual model biases, and provide more robust placement predictions for borderline students.</p>
+      </article>
+    </section>
+  {% endif %}
+{% endblock %}

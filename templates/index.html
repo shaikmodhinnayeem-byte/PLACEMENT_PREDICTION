@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+  <section class="hero">
+    <p class="eyebrow">End-to-End ML Pipeline</p>
+    <h1>Placement & Salary Intelligence Platform</h1>
+    <p>Comprehensive machine learning dashboard covering data loading, exploratory analysis, Min-Max normalization, linear regression accuracy, ID3 decision trees, boosting, ensemble architectures, K-Means clustering, and DBSCAN anomaly detection.</p>
+  </section>
+  {% if overview %}
+    <section class="metrics four project-metrics">
+      <article><strong>{{ overview.rows | int }}</strong><span>Students in dataset</span></article>
+      <article><strong>{{ overview.columns }}</strong><span>Dataset columns</span></article>
+      <article><strong>{{ overview.placed_percent }}%</strong><span>Students placed</span></article>
+      <article style="border-top:4px solid var(--green);"><strong>{{ overview.completed_modules }}/{{ overview.total_modules }}</strong><span>Modules active & live</span></article>
+    </section>
+    <section class="two-column overview-section">
+      <article class="panel">
+        <h2>End-to-End Pipeline Architecture</h2>
+        <ol class="project-flow">
+          <li><strong>Data Loading:</strong> Verify student records, schema structure, data types, and null indicators.</li>
+          <li><strong>EDA:</strong> Summary distributions, cross-feature correlations, and class balance analysis.</li>
+          <li><strong>Preprocessing & Min-Max Normalization:</strong> Leakage-free train/test split, categorical encoding, and Min-Max $[0, 1]$ normalization.</li>
+          <li><strong>Linear Regression & Accuracy:</strong> Continuous salary prediction evaluated with tolerance intervals (±10%, ±15%, ±20%), MAPE accuracy, and R².</li>
+          <li><strong>Logistic Regression:</strong> Binary classification of placement outcomes with odds ratio analysis and ROC curves.</li>
+          <li><strong>ID3 Decision Tree:</strong> Quinlan's information gain and entropy-based tree with interpretable rule paths.</li>
+          <li><strong>Boosting Algorithms:</strong> Sequential error-correction benchmark comparing AdaBoost and Gradient Boosting (GBM).</li>
+          <li><strong>Ensemble Learning:</strong> Parallel Bagging (Random Forest), Soft Voting, and Stacking meta-models.</li>
+          <li><strong>K-Means Clustering:</strong> Student skill persona segmentation guided by the Elbow Method and Silhouette analysis.</li>
+          <li><strong>DBSCAN Clustering:</strong> Density-based spatial grouping discovering natural cohorts and detecting outlier anomalies.</li>
+        </ol>
+      </article>
+      <article class="panel">
+        <h2>Dataset Configuration & Targets</h2>
+        <dl class="definition-list">
+          <dt>Data Source</dt><dd>placement_data.csv (50,000 student records)</dd>
+          <dt>Missing Values</dt><dd>{{ overview.missing_values | int }} cells imputed without data leakage.</dd>
+          <dt>Classification Target</dt><dd>PlacementStatus (0: Unplaced, 1: Placed)</dd>
+          <dt>Regression Target</dt><dd>Salary Package (LPA, modeled exclusively on placed students)</dd>
+          <dt>Unsupervised Tasks</dt><dd>Skill persona grouping (K-Means) & Anomaly detection (DBSCAN)</dd>
+        </dl>
+      </article>
+    </section>
+  {% endif %}
+  <h2 class="section-title">Machine Learning Modules</h2>
+  <section class="module-grid" aria-label="Dashboard modules">
+    {% for module in modules %}
+      <article class="module-card {{ 'is-live' if module.implemented else '' }}">
+        <div class="card-topline"><span class="status-badge {{ 'live' if module.implemented else 'pending' }}">{{ 'Live' if module.implemented else 'Coming soon' }}</span></div>
+        <h2>{{ module.name }}</h2>
+        <p>{{ module.description }}</p>
+        <a href="{{ url_for(module.endpoint) }}">Open module <span aria-hidden="true">→</span></a>
+      </article>
+    {% endfor %}
+  </section>
+{% endblock %}
