@@ -4,6 +4,4 @@ __pycache__/
 venv/
 .env
 models/*.pkl
-static/charts/*
-!static/charts/.gitkeep
 .docx_render/
